@@ -10,7 +10,6 @@
     </head>
     <body>
        <div id="form"></div>
-       <div id="example"></div>
 
        <script src="/js/app.js" type="text/javascript"></script>
     </body>
