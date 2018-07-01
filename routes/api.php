@@ -13,3 +13,7 @@
 
 Route::get('/entries', 'ContactEntriesController@index');
 Route::post('/entries', 'ContactEntriesController@create');
+
+// Add routes for possible future use
+Route::get('entries/{id}', 'ContactEntriesController@findOne');
+Route::delete('entries/{id}', 'ContactEntriesController@delete');
