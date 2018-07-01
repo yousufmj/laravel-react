@@ -60,4 +60,53 @@ class EntriesApiTest extends TestCase
                 ],
             ]);
     }
+
+    /**
+     * create an entry with incorrect email
+     */
+    public function testCreateEntryEmailValidation()
+    {
+        $faker = Factory::create();
+
+        $body = [
+            'name' => $faker->name,
+            'email' => $faker->name,
+            'message' => $faker->text,
+        ];
+
+        $response = $this->json('post', '/api/entries', $body);
+
+        $response
+            ->assertStatus(400)
+            ->assertJsonStructure([
+                'email',
+            ])
+            ->assertJson([
+                'email' => ['The email must be a valid email address.'],
+            ]);
+    }
+
+    /**
+     * create an entry with mising field
+     */
+    public function testCreateEntryWithMissing()
+    {
+        $faker = Factory::create();
+
+        $body = [
+            'name' => $faker->name,
+            'email' => $faker->email,
+        ];
+
+        $response = $this->json('post', '/api/entries', $body);
+
+        $response
+            ->assertStatus(400)
+            ->assertJsonStructure([
+                'message',
+            ])
+            ->assertJson([
+                'message' => ['The message field is required.'],
+            ]);
+    }
 }
