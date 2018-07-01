@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Entries;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use Validator;
+=======
+>>>>>>> 7141f1f358c1069be102072bf4938ba77e08ce38
 
 class ContactEntriesController extends Controller
 {
@@ -24,6 +27,7 @@ class ContactEntriesController extends Controller
      */
     public function create(Request $request)
     {
+<<<<<<< HEAD
         // Create a simple validation for required fields
         $validate = Validator::make($request->all(), [
             "name" => "required",
@@ -36,10 +40,13 @@ class ContactEntriesController extends Controller
             return response()->json($validate->messages(), 400);
         }
 
+=======
+>>>>>>> 7141f1f358c1069be102072bf4938ba77e08ce38
         $entries = Entries::create($request->all());
 
         return response()->json($entries, 201);
     }
+<<<<<<< HEAD
 
     /**
      * Find a specific entry
@@ -81,4 +88,6 @@ class ContactEntriesController extends Controller
 
         return response()->json('', 204);
     }
+=======
+>>>>>>> 7141f1f358c1069be102072bf4938ba77e08ce38
 }
