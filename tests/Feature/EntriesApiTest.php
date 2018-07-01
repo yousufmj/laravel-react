@@ -87,7 +87,7 @@ class EntriesApiTest extends TestCase
     }
 
     /**
-     * create an entry with mising field
+     * create an entry with missing field
      */
     public function testCreateEntryWithMissing()
     {
@@ -108,5 +108,64 @@ class EntriesApiTest extends TestCase
             ->assertJson([
                 'message' => ['The message field is required.'],
             ]);
+    }
+
+    /**
+     * Delete Specific entry
+     */
+    public function testDeleteEntry()
+    {
+
+        $response = $this->json('delete', '/api/entries/1');
+
+        $response
+            ->assertStatus(204);
+    }
+
+    /**
+     * Test deleting entry that doesn't exist
+     */
+    public function testDeleteEntryMissing()
+    {
+
+        $response = $this->json('delete', '/api/entries/ff');
+
+        $response
+            ->assertStatus(404)
+            ->assertJson([
+                "Error" => "Entry Not Found",
+            ]);
+    }
+
+    /**
+     * Find a Specific entry that exists
+     */
+    public function testFindOne()
+    {
+
+        $response = $this->json('get', '/api/entries/1');
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                "id",
+                "name",
+                "email",
+                "message",
+                "created_at",
+                "updated_at",
+            ]);
+    }
+
+    /**
+     * Test finding an entry that doesn't exist
+     */
+    public function testFindOneMissing()
+    {
+
+        $response = $this->json('get', '/api/entries/33');
+
+        $response
+            ->assertStatus(204);
     }
 }
