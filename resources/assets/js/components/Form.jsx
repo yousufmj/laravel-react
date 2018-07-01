@@ -30,6 +30,9 @@ const styles = theme => ({
   }
 });
 
+/**
+ * Display a form card
+ */
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -44,6 +47,7 @@ class Form extends Component {
     };
   }
 
+  // set the form state dependant on field
   onChange = name => event => {
     // change states value based on key from the form
     this.setState({
@@ -54,6 +58,7 @@ class Form extends Component {
     });
   };
 
+  // Send a request to the api for the form
   handleSubmit = event => {
     event.preventDefault();
     const url = '/api/entries';
@@ -62,10 +67,12 @@ class Form extends Component {
     axios
       .post(url, form)
       .then(results => {
+        // reset state and mark as success
         this.setState({ form: {}, success: true });
       })
       .catch(error => {
         const response = error.response;
+        // set errors
         this.setState({
           errors: response.data
         });

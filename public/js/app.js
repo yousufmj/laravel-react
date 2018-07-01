@@ -64785,6 +64785,10 @@ var styles = function styles(theme) {
   };
 };
 
+/**
+ * Display a form card
+ */
+
 var Form = function (_Component) {
   _inherits(Form, _Component);
 
@@ -64809,9 +64813,11 @@ var Form = function (_Component) {
 
 
       __WEBPACK_IMPORTED_MODULE_7_axios___default.a.post(url, form).then(function (results) {
+        // reset state and mark as success
         _this.setState({ form: {}, success: true });
       }).catch(function (error) {
         var response = error.response;
+        // set errors
         _this.setState({
           errors: response.data
         });
@@ -64829,6 +64835,12 @@ var Form = function (_Component) {
     };
     return _this;
   }
+
+  // set the form state dependant on field
+
+
+  // Send a request to the api for the form
+
 
   _createClass(Form, [{
     key: 'render',
