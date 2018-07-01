@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { Button } from '@material-ui/core';
+import { Button, FormHelperText } from '@material-ui/core';
+import axios from 'axios';
 
 const styles = theme => ({
   root: {
@@ -23,50 +24,121 @@ const styles = theme => ({
   },
   menu: {
     width: 200
+  },
+  red: {
+    color: 'red'
   }
 });
 
+/**
+ * Display a form card
+ */
 class Form extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      form: {
+        name: '',
+        email: '',
+        message: ''
+      },
+      errors: {},
+      success: false
+    };
   }
+
+  // set the form state dependant on field
+  onChange = name => event => {
+    // change states value based on key from the form
+    this.setState({
+      form: {
+        ...this.state.form,
+        [name]: event.target.value
+      }
+    });
+  };
+
+  // Send a request to the api for the form
+  handleSubmit = event => {
+    event.preventDefault();
+    const url = '/api/entries';
+    const { form } = this.state;
+
+    axios
+      .post(url, form)
+      .then(results => {
+        // reset state and mark as success
+        this.setState({ form: {}, success: true });
+      })
+      .catch(error => {
+        const response = error.response;
+        // set errors
+        this.setState({
+          errors: response.data
+        });
+      });
+  };
   render() {
     const { classes } = this.props;
+    const { form, errors } = this.state;
     return (
       <div className={classes.root}>
         <Card>
           <CardContent>
             <h2>Contact Form</h2>
-            <form noValidate>
-              <TextField
-                id="name"
-                label="Name"
-                className={classes.textField}
-                margin="normal"
-              />
-              <br />
+            {this.state.success && <h3>Your form was succesfully sent</h3>}
+            {!this.state.success && (
+              <form onSubmit={this.handleSubmit}>
+                <TextField
+                  id="name"
+                  label="Name"
+                  className={classes.textField}
+                  margin="normal"
+                  name="name"
+                  onChange={this.onChange('name')}
+                />
+                {errors.name && (
+                  <FormHelperText className={classes.red}>
+                    {errors.name}
+                  </FormHelperText>
+                )}
+                <br />
 
-              <TextField
-                id="email"
-                label="Email"
-                type="email"
-                className={classes.textField}
-                margin="normal"
-              />
-              <br />
+                <TextField
+                  id="email"
+                  label="Email"
+                  type="email"
+                  className={classes.textField}
+                  margin="normal"
+                  name="email"
+                  onChange={this.onChange('email')}
+                />
+                {errors.email && (
+                  <FormHelperText className={classes.red}>
+                    {errors.email}
+                  </FormHelperText>
+                )}
+                <br />
 
-              <TextField
-                id="message"
-                label="Name"
-                className={classes.textField}
-                margin="normal"
-              />
-              <br />
-              <Button variant="contained" color="primary" type="submit">
-                Submit
-              </Button>
-            </form>
+                <TextField
+                  id="message"
+                  label="Message"
+                  className={classes.textField}
+                  margin="normal"
+                  name="message"
+                  onChange={this.onChange('message')}
+                />
+                {errors.message && (
+                  <FormHelperText className={classes.red}>
+                    {errors.message}
+                  </FormHelperText>
+                )}
+                <br />
+                <Button variant="contained" color="primary" type="submit">
+                  Submit
+                </Button>
+              </form>
+            )}
           </CardContent>
         </Card>
       </div>
