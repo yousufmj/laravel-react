@@ -64739,6 +64739,8 @@ module.exports = function spread(callback) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__material_ui_core__ = __webpack_require__(341);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_axios__ = __webpack_require__(111);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_axios__);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -64791,11 +64793,14 @@ var Form = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
 
-    _this.onChange = function (e) {
-      // change states value based on key from the form
-      _this.setState({
-        form: _defineProperty({}, e.target.name, e.target.value)
-      });
+    _this.onChange = function (name) {
+      return function (event) {
+        // change states value based on key from the form
+        _this.setState({
+          form: _extends({}, _this.state.form, _defineProperty({}, name, event.target.value))
+        });
+        console.log(_this.state);
+      };
     };
 
     _this.handleSubmit = function (event) {
@@ -64803,8 +64808,10 @@ var Form = function (_Component) {
       var url = '/api/entries';
       var form = _this.state.form;
 
+      console.log(_this.state);
+
       __WEBPACK_IMPORTED_MODULE_7_axios___default.a.post(url, form).then(function (results) {
-        return results;
+        // this.setState({ form: {} });
       }).catch(function (error) {
         var response = error.response.data;
         _this.setState({
@@ -64848,14 +64855,14 @@ var Form = function (_Component) {
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'form',
-              { noValidate: true, onSubmit: this.handleSubmit },
+              { onSubmit: this.handleSubmit },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__material_ui_core_TextField___default.a, {
                 id: 'name',
                 label: 'Name',
                 className: classes.textField,
                 margin: 'normal',
                 name: 'name',
-                onChange: this.onChange
+                onChange: this.onChange('name')
               }),
               errors.name && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_6__material_ui_core__["b" /* FormHelperText */],
@@ -64870,7 +64877,7 @@ var Form = function (_Component) {
                 className: classes.textField,
                 margin: 'normal',
                 name: 'email',
-                onChange: this.onChange
+                onChange: this.onChange('email')
               }),
               errors.email && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_6__material_ui_core__["b" /* FormHelperText */],
@@ -64884,7 +64891,7 @@ var Form = function (_Component) {
                 className: classes.textField,
                 margin: 'normal',
                 name: 'message',
-                onChange: this.onChange
+                onChange: this.onChange('message')
               }),
               errors.name && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_6__material_ui_core__["b" /* FormHelperText */],

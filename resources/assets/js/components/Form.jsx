@@ -43,22 +43,28 @@ class Form extends Component {
     };
   }
 
-  onChange = e => {
+  onChange = name => event => {
     // change states value based on key from the form
     this.setState({
       form: {
-        [e.target.name]: e.target.value
+        ...this.state.form,
+        [name]: event.target.value
       }
     });
+    console.log(this.state);
   };
 
   handleSubmit = event => {
     event.preventDefault();
     const url = '/api/entries';
     const { form } = this.state;
+    console.log(this.state);
+
     axios
       .post(url, form)
-      .then(results => results)
+      .then(results => {
+        // this.setState({ form: {} });
+      })
       .catch(error => {
         const response = error.response.data;
         this.setState({
@@ -74,14 +80,14 @@ class Form extends Component {
         <Card>
           <CardContent>
             <h2>Contact Form</h2>
-            <form noValidate onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit}>
               <TextField
                 id="name"
                 label="Name"
                 className={classes.textField}
                 margin="normal"
                 name="name"
-                onChange={this.onChange}
+                onChange={this.onChange('name')}
               />
               {errors.name && (
                 <FormHelperText className={classes.red}>
@@ -97,7 +103,7 @@ class Form extends Component {
                 className={classes.textField}
                 margin="normal"
                 name="email"
-                onChange={this.onChange}
+                onChange={this.onChange('email')}
               />
               {errors.email && (
                 <FormHelperText className={classes.red}>
@@ -112,7 +118,7 @@ class Form extends Component {
                 className={classes.textField}
                 margin="normal"
                 name="message"
-                onChange={this.onChange}
+                onChange={this.onChange('message')}
               />
               {errors.name && (
                 <FormHelperText className={classes.red}>
