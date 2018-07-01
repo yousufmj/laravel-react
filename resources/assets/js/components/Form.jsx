@@ -39,7 +39,8 @@ class Form extends Component {
         email: '',
         message: ''
       },
-      errors: {}
+      errors: {},
+      success: false
     };
   }
 
@@ -51,24 +52,22 @@ class Form extends Component {
         [name]: event.target.value
       }
     });
-    console.log(this.state);
   };
 
   handleSubmit = event => {
     event.preventDefault();
     const url = '/api/entries';
     const { form } = this.state;
-    console.log(this.state);
 
     axios
       .post(url, form)
       .then(results => {
-        // this.setState({ form: {} });
+        this.setState({ form: {}, success: true });
       })
       .catch(error => {
-        const response = error.response.data;
+        const response = error.response;
         this.setState({
-          errors: response
+          errors: response.data
         });
       });
   };
@@ -80,56 +79,59 @@ class Form extends Component {
         <Card>
           <CardContent>
             <h2>Contact Form</h2>
-            <form onSubmit={this.handleSubmit}>
-              <TextField
-                id="name"
-                label="Name"
-                className={classes.textField}
-                margin="normal"
-                name="name"
-                onChange={this.onChange('name')}
-              />
-              {errors.name && (
-                <FormHelperText className={classes.red}>
-                  {errors.name}
-                </FormHelperText>
-              )}
-              <br />
+            {this.state.success && <h3>Your form was succesfully sent</h3>}
+            {!this.state.success && (
+              <form onSubmit={this.handleSubmit}>
+                <TextField
+                  id="name"
+                  label="Name"
+                  className={classes.textField}
+                  margin="normal"
+                  name="name"
+                  onChange={this.onChange('name')}
+                />
+                {errors.name && (
+                  <FormHelperText className={classes.red}>
+                    {errors.name}
+                  </FormHelperText>
+                )}
+                <br />
 
-              <TextField
-                id="email"
-                label="Email"
-                type="email"
-                className={classes.textField}
-                margin="normal"
-                name="email"
-                onChange={this.onChange('email')}
-              />
-              {errors.email && (
-                <FormHelperText className={classes.red}>
-                  {errors.email}
-                </FormHelperText>
-              )}
-              <br />
+                <TextField
+                  id="email"
+                  label="Email"
+                  type="email"
+                  className={classes.textField}
+                  margin="normal"
+                  name="email"
+                  onChange={this.onChange('email')}
+                />
+                {errors.email && (
+                  <FormHelperText className={classes.red}>
+                    {errors.email}
+                  </FormHelperText>
+                )}
+                <br />
 
-              <TextField
-                id="message"
-                label="Message"
-                className={classes.textField}
-                margin="normal"
-                name="message"
-                onChange={this.onChange('message')}
-              />
-              {errors.name && (
-                <FormHelperText className={classes.red}>
-                  {errors.message}
-                </FormHelperText>
-              )}
-              <br />
-              <Button variant="contained" color="primary" type="submit">
-                Submit
-              </Button>
-            </form>
+                <TextField
+                  id="message"
+                  label="Message"
+                  className={classes.textField}
+                  margin="normal"
+                  name="message"
+                  onChange={this.onChange('message')}
+                />
+                {errors.message && (
+                  <FormHelperText className={classes.red}>
+                    {errors.message}
+                  </FormHelperText>
+                )}
+                <br />
+                <Button variant="contained" color="primary" type="submit">
+                  Submit
+                </Button>
+              </form>
+            )}
           </CardContent>
         </Card>
       </div>

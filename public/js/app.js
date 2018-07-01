@@ -64799,7 +64799,6 @@ var Form = function (_Component) {
         _this.setState({
           form: _extends({}, _this.state.form, _defineProperty({}, name, event.target.value))
         });
-        console.log(_this.state);
       };
     };
 
@@ -64808,14 +64807,13 @@ var Form = function (_Component) {
       var url = '/api/entries';
       var form = _this.state.form;
 
-      console.log(_this.state);
 
       __WEBPACK_IMPORTED_MODULE_7_axios___default.a.post(url, form).then(function (results) {
-        // this.setState({ form: {} });
+        _this.setState({ form: {}, success: true });
       }).catch(function (error) {
-        var response = error.response.data;
+        var response = error.response;
         _this.setState({
-          errors: response
+          errors: response.data
         });
       });
     };
@@ -64826,7 +64824,8 @@ var Form = function (_Component) {
         email: '',
         message: ''
       },
-      errors: {}
+      errors: {},
+      success: false
     };
     return _this;
   }
@@ -64853,7 +64852,12 @@ var Form = function (_Component) {
               null,
               'Contact Form'
             ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            this.state.success && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'h3',
+              null,
+              'Your form was succesfully sent'
+            ),
+            !this.state.success && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'form',
               { onSubmit: this.handleSubmit },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__material_ui_core_TextField___default.a, {
@@ -64893,7 +64897,7 @@ var Form = function (_Component) {
                 name: 'message',
                 onChange: this.onChange('message')
               }),
-              errors.name && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              errors.message && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_6__material_ui_core__["b" /* FormHelperText */],
                 { className: classes.red },
                 errors.message
