@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { Button, FormHelperText } from '@material-ui/core';
+import {
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody
+} from '@material-ui/core';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -16,17 +21,6 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     minHeight: 400,
     padding: 20
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200
-  },
-  menu: {
-    width: 200
-  },
-  red: {
-    color: 'red'
   }
 });
 
@@ -36,16 +30,47 @@ const styles = theme => ({
 class Form extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      entries: []
+    };
+  }
+
+  componentDidMount() {
+    axios.get('/api/entries').then(response => {
+      this.setState({
+        entries: response.data.results
+      });
+    });
   }
 
   render() {
     const classes = this.props;
+    const { entries } = this.state;
     return (
       <div className={classes.root}>
         <Card>
           <CardContent>
-            <h2>View</h2>
+            <h2>All Entries</h2>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Message</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {entries.map(e => {
+                  return (
+                    <TableRow key={e.id}>
+                      <TableCell>{e.name}</TableCell>
+                      <TableCell>{e.email}</TableCell>
+                      <TableCell>{e.message}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </div>
