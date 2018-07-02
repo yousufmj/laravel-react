@@ -15,6 +15,8 @@ This is a simple form that was built using Laravel as an API backend along with 
     - Login / JWT etc to ensure only the right peple can view
 - Improve DB - have a user table that links to an entry table
 - Improve Validations and sanitisations - only relying on Eloquent
+- Options to delete or view entry / filter
+- dynamic refresh of view rows
 
 ## Set Up
 - Clone Repo
@@ -25,6 +27,7 @@ This is a simple form that was built using Laravel as an API backend along with 
 - Run `php artisan migrate` - this updates and creates database tables
 - Run `vendor/bin/phpunit` - to run the tests
 - Run `php artisan serve` - to start the laravel app
+- App can be found on http://127.0.0.1:8000/
 
 ## API
 GET /api/entries - Views all entries
